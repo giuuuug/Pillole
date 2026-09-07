@@ -1,0 +1,340 @@
+@import 'tailwindcss';
+@import '@fontsource-variable/nunito';
+@import '@fontsource-variable/dm-sans';
+@import 'katex/dist/katex.min.css';
+
+/* ==========================================================================
+   PILLOLE — Design tokens
+   Palette: rose vibrante (brand) + blu engagement (azioni), base neutra ad
+   alto contrasto. Adattata dalla proposta "Vibrant & Block-based": lo sfondo
+   rosa candy e' stato sostituito da una base neutra perche' il target e' 14-99
+   anni e il contenuto e' testo lungo (leggibilita' > vivacita').
+   Tutte le coppie testo/sfondo sono >= 4.5:1 (WCAG 2.2 AA), le principali >= 7:1.
+   ========================================================================== */
+@theme {
+	--font-display: 'Nunito Variable', ui-rounded, system-ui, sans-serif;
+	--font-sans: 'DM Sans Variable', ui-sans-serif, system-ui, sans-serif;
+	--font-mono: ui-monospace, 'SFMono-Regular', 'Cascadia Code', monospace;
+
+	/* Scala tipografica: base 17px, non 16 — il target arriva a 99 anni. */
+	--text-xs: 0.8125rem;
+	--text-sm: 0.9375rem;
+	--text-base: 1.0625rem;
+	--text-lg: 1.1875rem;
+	--text-xl: 1.375rem;
+	--text-2xl: 1.625rem;
+	--text-3xl: 2rem;
+	--text-4xl: 2.5rem;
+
+	--radius-pill: 999px;
+
+	/* Superficie minima toccabile (WCAG 2.2 – 2.5.8 Target Size) */
+	--spacing-touch: 2.75rem; /* 44px */
+
+	--ease-out-back: cubic-bezier(0.34, 1.35, 0.64, 1);
+	--ease-out-soft: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* --- Light (default) --- */
+:root {
+	color-scheme: light;
+
+	--c-bg: #ffffff;
+	--c-surface: #f8fafc;
+	--c-surface-2: #f1f5f9;
+	--c-card: #ffffff;
+	--c-fg: #0f172a; /* 17.9:1 su bg */
+	--c-fg-muted: #475569; /* 7.5:1 su bg */
+	--c-border: #e2e8f0;
+	--c-border-strong: #cbd5e1;
+
+	--c-primary: #e11d48; /* fill; testo bianco sopra = 4.8:1 */
+	--c-primary-hover: #be123c;
+	--c-on-primary: #ffffff;
+	--c-primary-text: #be123c; /* 6.3:1 — per testo/icone su sfondo chiaro */
+	--c-primary-soft: #fff1f2;
+
+	--c-accent: #2563eb; /* 5.2:1 */
+	--c-accent-hover: #1d4ed8;
+	--c-on-accent: #ffffff;
+	--c-accent-soft: #eff6ff;
+
+	--c-success: #15803d;
+	--c-success-soft: #f0fdf4;
+	--c-warning: #a16207;
+	--c-warning-soft: #fffbeb;
+	--c-danger: #dc2626;
+	--c-on-danger: #ffffff;
+	--c-danger-soft: #fef2f2;
+
+	--c-ring: #e11d48;
+}
+
+/* --- Dark --- */
+:root[data-theme='dark'] {
+	color-scheme: dark;
+
+	--c-bg: #0b1120;
+	--c-surface: #131c2e;
+	--c-surface-2: #1c273c;
+	--c-card: #131c2e;
+	--c-fg: #f1f5f9; /* 16.4:1 */
+	--c-fg-muted: #a3b1c6; /* 8.9:1 */
+	--c-border: #263349;
+	--c-border-strong: #3a4a66;
+
+	--c-primary: #fb7185; /* 7.5:1 su bg scuro */
+	--c-primary-hover: #fda4af;
+	--c-on-primary: #4c0519;
+	--c-primary-text: #fb7185;
+	--c-primary-soft: #2a1119;
+
+	--c-accent: #60a5fa;
+	--c-accent-hover: #93c5fd;
+	--c-on-accent: #0b1120;
+	--c-accent-soft: #10203b;
+
+	--c-success: #4ade80;
+	--c-success-soft: #122a1c;
+	--c-warning: #fbbf24;
+	--c-warning-soft: #2a2210;
+	--c-danger: #f87171;
+	--c-on-danger: #450a0a;
+	--c-danger-soft: #2a1313;
+
+	--c-ring: #fb7185;
+}
+
+@theme inline {
+	--color-bg: var(--c-bg);
+	--color-surface: var(--c-surface);
+	--color-surface-2: var(--c-surface-2);
+	--color-card: var(--c-card);
+	--color-fg: var(--c-fg);
+	--color-fg-muted: var(--c-fg-muted);
+	--color-border-base: var(--c-border);
+	--color-border-strong: var(--c-border-strong);
+	--color-primary: var(--c-primary);
+	--color-primary-hover: var(--c-primary-hover);
+	--color-on-primary: var(--c-on-primary);
+	--color-primary-text: var(--c-primary-text);
+	--color-primary-soft: var(--c-primary-soft);
+	--color-accent: var(--c-accent);
+	--color-accent-hover: var(--c-accent-hover);
+	--color-on-accent: var(--c-on-accent);
+	--color-accent-soft: var(--c-accent-soft);
+	--color-success: var(--c-success);
+	--color-success-soft: var(--c-success-soft);
+	--color-warning: var(--c-warning);
+	--color-warning-soft: var(--c-warning-soft);
+	--color-danger: var(--c-danger);
+	--color-on-danger: var(--c-on-danger);
+	--color-danger-soft: var(--c-danger-soft);
+	--color-ring: var(--c-ring);
+}
+
+@layer base {
+	html {
+		-webkit-text-size-adjust: 100%;
+		scroll-behavior: smooth;
+	}
+
+	body {
+		background-color: var(--c-bg);
+		color: var(--c-fg);
+		font-family: var(--font-sans);
+		font-size: var(--text-base);
+		line-height: 1.6;
+		-webkit-font-smoothing: antialiased;
+		text-rendering: optimizeLegibility;
+		overscroll-behavior-y: none;
+	}
+
+	h1,
+	h2,
+	h3,
+	h4 {
+		font-family: var(--font-display);
+		font-weight: 800;
+		line-height: 1.2;
+		text-wrap: balance;
+	}
+
+	p,
+	li {
+		text-wrap: pretty;
+	}
+
+	/* Focus SEMPRE visibile: mai rimosso, solo reso coerente. */
+	:focus-visible {
+		outline: 3px solid var(--c-ring);
+		outline-offset: 2px;
+		border-radius: 6px;
+	}
+
+	::selection {
+		background: var(--c-primary);
+		color: var(--c-on-primary);
+	}
+
+	@supports (scrollbar-width: thin) {
+		* {
+			scrollbar-width: thin;
+			scrollbar-color: var(--c-border-strong) transparent;
+		}
+	}
+}
+
+@layer components {
+	.card {
+		background: var(--c-card);
+		border: 1px solid var(--c-border);
+		border-radius: 1rem;
+	}
+
+	/* Bottoni: sempre >= 44px di area toccabile */
+	.btn {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		gap: 0.5rem;
+		min-height: 2.75rem;
+		padding: 0.625rem 1.125rem;
+		border-radius: 0.75rem;
+		font-weight: 700;
+		font-family: var(--font-display);
+		cursor: pointer;
+		transition:
+			background-color 180ms var(--ease-out-soft),
+			color 180ms var(--ease-out-soft),
+			transform 120ms var(--ease-out-soft),
+			box-shadow 180ms var(--ease-out-soft);
+	}
+	.btn:active:not(:disabled) {
+		transform: scale(0.97);
+	}
+	.btn:disabled {
+		opacity: 0.5;
+		cursor: not-allowed;
+	}
+
+	.btn-primary {
+		background: var(--c-primary);
+		color: var(--c-on-primary);
+	}
+	.btn-primary:hover:not(:disabled) {
+		background: var(--c-primary-hover);
+	}
+
+	.btn-accent {
+		background: var(--c-accent);
+		color: var(--c-on-accent);
+	}
+	.btn-accent:hover:not(:disabled) {
+		background: var(--c-accent-hover);
+	}
+
+	.btn-ghost {
+		background: transparent;
+		color: var(--c-fg);
+		border: 1px solid var(--c-border-strong);
+	}
+	.btn-ghost:hover:not(:disabled) {
+		background: var(--c-surface-2);
+	}
+
+	.btn-danger {
+		background: var(--c-danger);
+		color: var(--c-on-danger);
+	}
+
+	.input {
+		width: 100%;
+		min-height: 2.75rem;
+		padding: 0.625rem 0.875rem;
+		border-radius: 0.75rem;
+		border: 1.5px solid var(--c-border-strong);
+		background: var(--c-bg);
+		color: var(--c-fg);
+		font-size: var(--text-base);
+		transition: border-color 160ms var(--ease-out-soft);
+	}
+	.input::placeholder {
+		color: var(--c-fg-muted);
+		opacity: 1;
+	}
+	.input:hover:not(:disabled) {
+		border-color: var(--c-fg-muted);
+	}
+	.input[aria-invalid='true'] {
+		border-color: var(--c-danger);
+	}
+
+	.label {
+		display: block;
+		font-weight: 700;
+		font-size: var(--text-sm);
+		margin-bottom: 0.375rem;
+		color: var(--c-fg);
+	}
+
+	.chip {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.375rem;
+		padding: 0.3125rem 0.75rem;
+		border-radius: 999px;
+		font-size: var(--text-sm);
+		font-weight: 700;
+		white-space: nowrap;
+		border: 1px solid var(--c-border);
+		background: var(--c-surface-2);
+		color: var(--c-fg);
+	}
+
+	.skeleton {
+		background: linear-gradient(
+			90deg,
+			var(--c-surface-2) 25%,
+			var(--c-border) 50%,
+			var(--c-surface-2) 75%
+		);
+		background-size: 200% 100%;
+		animation: shimmer 1.4s linear infinite;
+		border-radius: 0.5rem;
+	}
+
+	/* Safe area per iPhone / Android con gesture bar */
+	.safe-bottom {
+		padding-bottom: max(0.5rem, env(safe-area-inset-bottom));
+	}
+	.safe-top {
+		padding-top: max(0.5rem, env(safe-area-inset-top));
+	}
+}
+
+@keyframes shimmer {
+	to {
+		background-position: -200% 0;
+	}
+}
+
+/* Il movimento non e' mai l'unico veicolo di significato: qui lo spegniamo tutto. */
+@media (prefers-reduced-motion: reduce) {
+	*,
+	*::before,
+	*::after {
+		animation-duration: 0.01ms !important;
+		animation-iteration-count: 1 !important;
+		transition-duration: 0.01ms !important;
+		scroll-behavior: auto !important;
+	}
+}
+
+/* KaTeX: formule lunghe scrollano nel proprio contenitore, mai la pagina. */
+.katex-display {
+	overflow-x: auto;
+	overflow-y: hidden;
+	padding: 0.5rem 0;
+	max-width: 100%;
+}

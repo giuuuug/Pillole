@@ -1,0 +1,52 @@
+[build]
+  command = "npm run build"
+  publish = "build"
+
+[build.environment]
+  NODE_VERSION = "22"
+  NPM_FLAGS = "--no-audit --no-fund"
+
+# --- Produzione: solo `main` va sul sito pubblico ---
+# Le migrazioni NON girano qui: in fase di build Netlify non espone sempre
+# le variabili del database (sono pensate per il sito gia' online, non per
+# la build stessa), quindi il comando falliva in modo poco chiaro. Le
+# migrazioni si lanciano a mano, in locale, puntando al database di
+# produzione — vedi il README, sezione "Applying a schema change".
+[context.production]
+  command = "npm run build"
+
+# --- `develop`: URL di anteprima stabile per il lavoro in corso ---
+# Nessuna migrazione: sul piano free il database e' condiviso con la
+# produzione, e non deve essere una branch a cambiarne lo schema.
+[context.develop]
+  command = "npm run build"
+  [context.develop.environment]
+    PUBLIC_APP_ENV = "development"
+
+[context.deploy-preview]
+  command = "npm run build"
+
+# --- Header di sicurezza (OWASP A05: Security Misconfiguration) ---
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Content-Type-Options = "nosniff"
+    X-Frame-Options = "DENY"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "camera=(), microphone=(), geolocation=(), interest-cohort=()"
+    Strict-Transport-Security = "max-age=63072000; includeSubDomains; preload"
+    Cross-Origin-Opener-Policy = "same-origin"
+
+# Asset con hash nel nome: immutabili per un anno.
+[[headers]]
+  for = "/_app/immutable/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# Le anteprime non devono essere indicizzate come il sito vero.
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Robots-Tag = "noindex"
+  [headers.conditions]
+    Branch = ["develop"]

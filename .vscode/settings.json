@@ -1,0 +1,9 @@
+{
+	"editor.defaultFormatter": "esbenp.prettier-vscode",
+	"editor.formatOnSave": true,
+	"editor.codeActionsOnSave": { "source.fixAll.eslint": "explicit" },
+	"[svelte]": { "editor.defaultFormatter": "svelte.svelte-vscode" },
+	"files.associations": { "*.css": "tailwindcss" },
+	"tailwindCSS.experimental.classRegex": [["class:\s*?[\"'`]([^\"'`]*).*?[\"'`]"]],
+	"eslint.validate": ["javascript", "typescript", "svelte"]
+}

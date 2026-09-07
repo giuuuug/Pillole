@@ -1,0 +1,22 @@
+node_modules
+/build
+/.svelte-kit
+/.netlify
+/dist
+.env
+.env.*
+!.env.example
+.DS_Store
+*.log
+
+# Test blackbox (Playwright)
+/test-results
+/playwright-report
+/playwright-html-report
+/tests/**/*.js
+/tests/**/*.js.map
+docs/index.html
+scripts/__pycache__/
+scripts/*.pyc
+
+CLAUDE.md

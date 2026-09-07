@@ -1,0 +1,39 @@
+{
+	"name": "Pillole — il tuo bagaglio di conoscenza",
+	"short_name": "Pillole",
+	"description": "Scrivi le tue pillole di conoscenza, tienile in libreria o condividile.",
+	"start_url": "/",
+	"scope": "/",
+	"display": "standalone",
+	"orientation": "portrait-primary",
+	"background_color": "#ffffff",
+	"theme_color": "#e11d48",
+	"lang": "it",
+	"dir": "ltr",
+	"categories": ["education", "social", "books"],
+	"icons": [
+		{
+			"src": "/img/icon-192.png",
+			"sizes": "192x192",
+			"type": "image/png",
+			"purpose": "any"
+		},
+		{
+			"src": "/img/icon-512.png",
+			"sizes": "512x512",
+			"type": "image/png",
+			"purpose": "any"
+		},
+		{
+			"src": "/img/icon-maskable.png",
+			"sizes": "512x512",
+			"type": "image/png",
+			"purpose": "maskable"
+		}
+	],
+	"shortcuts": [
+		{ "name": "Nuova pillola", "url": "/nuova" },
+		{ "name": "La tua libreria", "url": "/libreria" },
+		{ "name": "Cerca", "url": "/cerca" }
+	]
+}

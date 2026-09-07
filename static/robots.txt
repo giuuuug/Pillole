@@ -1,0 +1,13 @@
+User-agent: *
+Allow: /
+# Aree private o senza contenuto indicizzabile
+Disallow: /api/
+Disallow: /libreria
+Disallow: /profilo
+Disallow: /nuova
+Disallow: /accedi
+Disallow: /registrati
+Disallow: /password-dimenticata
+Disallow: /reimposta-password
+
+Sitemap: https://pillole.netlify.app/sitemap.xml
