@@ -14,5 +14,11 @@ export const load: PageServerLoad = async ({ params, locals, url }) => {
 	// Si modifica solo cio' che si e' scritto.
 	if (!pill.isMine) error(403, 'Puoi modificare solo le tue pillole');
 
-	return { pill, canPublish: canPublish(locals.user as AppUser) };
+	const user = locals.user as AppUser;
+	return {
+		pill,
+		canPublish: canPublish(user),
+		hasUsername: Boolean(user.username),
+		emailVerified: Boolean(user.emailVerified)
+	};
 };

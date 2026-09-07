@@ -2,10 +2,29 @@
 	import { onMount } from 'svelte';
 	import { invalidateAll } from '$app/navigation';
 	import { page } from '$app/state';
+	import { authClient } from '$lib/auth-client';
+	import { toast } from '$lib/client/toast.svelte';
 	import TabBar from '$lib/components/TabBar.svelte';
 	import Avatar from '$lib/components/Avatar.svelte';
 
 	let { children, data } = $props();
+
+	let resending = $state(false);
+
+	async function resendVerification() {
+		if (!data.user) return;
+		resending = true;
+		const { error } = await authClient.sendVerificationEmail({
+			email: data.user.email,
+			callbackURL: page.url.pathname
+		});
+		resending = false;
+		toast[error ? 'error' : 'success'](
+			error
+				? 'Non è stato possibile inviare l’email. Riprova tra poco.'
+				: 'Email di conferma inviata.'
+		);
+	}
 
 	// Su un dispositivo condiviso, "indietro" dopo un logout puo' ripristinare
 	// questa pagina dalla bfcache del browser senza rieseguire alcun `load` —
@@ -60,6 +79,25 @@
 				{/if}
 			</div>
 		</header>
+
+		{#if data.user && !data.user.emailVerified}
+			<div
+				class="w-full border-b px-4 py-2 text-sm"
+				style="background:var(--c-warning-soft);border-color:var(--c-border);color:var(--c-warning)"
+			>
+				<div class="mx-auto flex w-full max-w-3xl flex-wrap items-center justify-between gap-2">
+					<span>Conferma la tua email per poter pubblicare le tue pillole.</span>
+					<button
+						type="button"
+						class="btn btn-ghost !min-h-0 shrink-0 !py-1 text-sm font-bold underline"
+						disabled={resending}
+						onclick={resendVerification}
+					>
+						{resending ? 'Invio…' : 'Rimanda email'}
+					</button>
+				</div>
+			</div>
+		{/if}
 
 		<main
 			id="contenuto"

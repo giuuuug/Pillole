@@ -16,7 +16,13 @@ export type PillCard = {
 	saveCount: number;
 	createdAt: string;
 	publishedAt: string | null;
-	author: { id: string; username: string | null; name: string; image: string | null };
+	author: {
+		id: string;
+		username: string | null;
+		name: string;
+		image: string | null;
+		badge: string | null;
+	};
 	/** true se la pillola e' stata salvata dall'utente che sta guardando. */
 	isSaved: boolean;
 	/** true se l'utente che guarda ne e' l'autore. */
@@ -32,7 +38,8 @@ const authorColumns = {
 	id: user.id,
 	username: user.username,
 	name: user.name,
-	image: user.image
+	image: user.image,
+	badge: user.badge
 };
 
 /**
@@ -64,6 +71,7 @@ type Row = {
 	authorUsername: string | null;
 	authorName: string;
 	authorImage: string | null;
+	authorBadge: string | null;
 	isSaved: boolean;
 };
 
@@ -83,7 +91,8 @@ function toCard(r: Row, viewerId: string | null): PillCard {
 			id: r.authorId,
 			username: r.authorUsername,
 			name: r.authorName,
-			image: r.authorImage
+			image: r.authorImage,
+			badge: r.authorBadge
 		},
 		isSaved: r.isSaved,
 		isMine: r.authorId === viewerId
@@ -105,6 +114,7 @@ const cardSelect = (viewerId: string | null) => ({
 	authorUsername: authorColumns.username,
 	authorName: authorColumns.name,
 	authorImage: authorColumns.image,
+	authorBadge: authorColumns.badge,
 	isSaved: savedExpr(viewerId)
 });
 

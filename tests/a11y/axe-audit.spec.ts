@@ -1,8 +1,9 @@
 import { test, expect, type Page } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
-import { registerAndVerifyUser } from '../support/actors';
+import { registerAndVerifyUser, registerUser } from '../support/actors';
 import { injectSession } from '../support/browser-auth';
 import { uniquePill } from '../support/factories';
+import { mailMark, waitForLink } from '../support/mail';
 
 /**
  * Scansione automatica (axe-core, WCAG 2.1 A/AA) di ogni pagina dell'app,
@@ -48,6 +49,17 @@ test.describe('Scansione axe — pagine pubbliche', () => {
 			await auditPage(page, url);
 		});
 	}
+
+	// A parte: serve un token di reset valido in query string, non un URL fisso.
+	test('/reimposta-password non ha violazioni WCAG', async ({ page }) => {
+		const { user, api } = await registerUser();
+		const mark = mailMark();
+		await api.requestPasswordReset(user.email);
+		const link = await waitForLink(/http:\/\/[^\s]+\/reset-password\/([^\s?]+)/, mark);
+		const token = new URL(link).pathname.split('/').pop()!;
+
+		await auditPage(page, `/reimposta-password?token=${token}`);
+	});
 });
 
 test.describe('Scansione axe — utente autenticato', () => {
@@ -83,6 +95,7 @@ test.describe('Scansione axe — utente autenticato', () => {
 			'/profilo/modifica',
 			'/profilo/sicurezza',
 			'/profilo/impostazioni',
+			`/u/${user.username}`,
 			`/u/${user.username}/follower`,
 			`/u/${user.username}/seguiti`
 		]) {

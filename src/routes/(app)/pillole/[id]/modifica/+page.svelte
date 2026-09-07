@@ -20,6 +20,8 @@
 <PillEditor
 	pillId={data.pill.id}
 	canPublish={data.canPublish}
+	hasUsername={data.hasUsername}
+	emailVerified={data.emailVerified}
 	initial={{
 		title: data.pill.title,
 		body: data.pill.body,

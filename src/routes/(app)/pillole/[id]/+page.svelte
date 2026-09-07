@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { goto, invalidateAll } from '$app/navigation';
+	import { page } from '$app/state';
 	import { toast } from '$lib/client/toast.svelte';
 	import { fullDate, relativeTime } from '$lib/utils/format';
 	import { toPlainText } from '$lib/utils/render';
@@ -112,9 +113,13 @@
 	<title>{pill.title} — Pillole</title>
 	<meta name="description" content={description} />
 	{#if pill.isPublic}
+		<link rel="canonical" href={page.url.origin + page.url.pathname} />
+		<meta property="og:url" content={page.url.origin + page.url.pathname} />
 		<meta property="og:title" content={pill.title} />
 		<meta property="og:description" content={description} />
 		<meta property="og:type" content="article" />
+		<meta name="twitter:title" content={pill.title} />
+		<meta name="twitter:description" content={description} />
 	{:else}
 		<meta name="robots" content="noindex" />
 	{/if}

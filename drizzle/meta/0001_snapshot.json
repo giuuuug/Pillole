@@ -1,6 +1,6 @@
 {
-  "id": "e735e2af-383b-4a9a-a9e2-2d98f8b8d208",
-  "prevId": "1fb64063-2e87-4635-a04f-e4858aadc879",
+  "id": "3833fee4-624e-4c2b-a304-2c53865b4aab",
+  "prevId": "3f177269-5d15-4ec7-9b44-07a82c51751e",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -823,6 +823,12 @@
         "bio": {
           "name": "bio",
           "type": "varchar(280)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "badge": {
+          "name": "badge",
+          "type": "varchar(20)",
           "primaryKey": false,
           "notNull": false
         },

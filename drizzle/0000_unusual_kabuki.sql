@@ -3,6 +3,7 @@ CREATE TABLE "account" (
 	"user_id" text NOT NULL,
 	"account_id" text NOT NULL,
 	"provider_id" text NOT NULL,
+	"issuer" text NOT NULL,
 	"access_token" text,
 	"refresh_token" text,
 	"access_token_expires_at" timestamp with time zone,
@@ -102,7 +103,7 @@ ALTER TABLE "saved_pill" ADD CONSTRAINT "saved_pill_user_id_user_id_fk" FOREIGN 
 ALTER TABLE "saved_pill" ADD CONSTRAINT "saved_pill_pill_id_pill_id_fk" FOREIGN KEY ("pill_id") REFERENCES "public"."pill"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "session" ADD CONSTRAINT "session_user_id_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."user"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 CREATE INDEX "account_user_id_idx" ON "account" USING btree ("user_id");--> statement-breakpoint
-CREATE UNIQUE INDEX "account_provider_idx" ON "account" USING btree ("provider_id","account_id");--> statement-breakpoint
+CREATE UNIQUE INDEX "account_issuer_idx" ON "account" USING btree ("issuer","account_id");--> statement-breakpoint
 CREATE INDEX "follow_following_idx" ON "follow" USING btree ("following_id");--> statement-breakpoint
 CREATE INDEX "follow_follower_created_idx" ON "follow" USING btree ("follower_id","created_at" DESC NULLS LAST);--> statement-breakpoint
 CREATE INDEX "pill_author_created_idx" ON "pill" USING btree ("author_id","created_at" DESC NULLS LAST);--> statement-breakpoint

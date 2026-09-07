@@ -17,7 +17,8 @@ export const load: PageServerLoad = async ({ locals, url, setHeaders }) => {
 			lastName: me.lastName ?? '',
 			username: me.username ?? '',
 			birthDate: me.birthDate ?? '',
-			bio: me.bio ?? ''
+			bio: me.bio ?? '',
+			image: me.image ?? null
 		}
 	};
 };

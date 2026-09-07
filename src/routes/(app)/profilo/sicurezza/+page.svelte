@@ -8,6 +8,23 @@
 
 	let { data } = $props();
 
+	/* --- Verifica email --- */
+	let resendingVerification = $state(false);
+
+	async function resendVerification() {
+		resendingVerification = true;
+		const { error } = await authClient.sendVerificationEmail({
+			email: data.email,
+			callbackURL: '/profilo/sicurezza'
+		});
+		resendingVerification = false;
+		toast[error ? 'error' : 'success'](
+			error
+				? 'Non è stato possibile inviare l’email. Riprova tra poco.'
+				: 'Email di conferma inviata.'
+		);
+	}
+
 	/* --- Cambia email --- */
 	let newEmail = $state('');
 	let emailError = $state('');
@@ -133,7 +150,33 @@
 <!-- Email -->
 <section class="card mb-4 p-5" aria-labelledby="sez-email">
 	<h2 id="sez-email" class="text-lg">Email</h2>
-	<p class="mt-1 text-sm" style="color:var(--c-fg-muted)">{data.email}</p>
+	<div class="mt-1 flex flex-wrap items-center gap-2">
+		<p class="text-sm" style="color:var(--c-fg-muted)">{data.email}</p>
+		{#if data.emailVerified}
+			<span
+				class="rounded-full px-2 py-0.5 text-xs font-bold"
+				style="background:var(--c-success-soft);color:var(--c-success)"
+			>
+				Confermata
+			</span>
+		{:else}
+			<span
+				class="rounded-full px-2 py-0.5 text-xs font-bold"
+				style="background:var(--c-warning-soft);color:var(--c-warning)"
+			>
+				Da confermare
+			</span>
+			<button
+				type="button"
+				class="text-xs font-bold underline"
+				style="color:var(--c-accent)"
+				disabled={resendingVerification}
+				onclick={resendVerification}
+			>
+				{resendingVerification ? 'Invio…' : 'Rimanda email'}
+			</button>
+		{/if}
+	</div>
 
 	{#if data.linkedProviders.length > 0}
 		<p class="mt-2 text-sm" style="color:var(--c-fg-muted)">

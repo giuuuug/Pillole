@@ -3,6 +3,7 @@
 	import { toast } from '$lib/client/toast.svelte';
 	import type { UserCard } from '$lib/server/services/social-service';
 	import Avatar from './Avatar.svelte';
+	import Badge from './Badge.svelte';
 	import Icon from './Icon.svelte';
 
 	type Props = { user: UserCard; canInteract?: boolean };
@@ -45,8 +46,12 @@
 	<Avatar name={user.name} username={user.username} image={user.image} size={44} />
 
 	<div class="min-w-0 flex-1">
-		<a href="/u/{user.username}" class="after:absolute after:inset-0 after:content-['']">
+		<a
+			href="/u/{user.username}"
+			class="flex items-center gap-1 after:absolute after:inset-0 after:content-['']"
+		>
 			<span class="block truncate font-extrabold">@{user.username}</span>
+			<Badge id={user.badge} size={14} />
 		</a>
 		<span class="block truncate text-sm" style="color:var(--c-fg-muted)">
 			{user.name} · {user.pillCount}

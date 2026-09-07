@@ -1,5 +1,5 @@
 {
-  "id": "1fb64063-2e87-4635-a04f-e4858aadc879",
+  "id": "3f177269-5d15-4ec7-9b44-07a82c51751e",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -28,6 +28,12 @@
         },
         "provider_id": {
           "name": "provider_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "issuer": {
+          "name": "issuer",
           "type": "text",
           "primaryKey": false,
           "notNull": true
@@ -105,11 +111,11 @@
           "method": "btree",
           "with": {}
         },
-        "account_provider_idx": {
-          "name": "account_provider_idx",
+        "account_issuer_idx": {
+          "name": "account_issuer_idx",
           "columns": [
             {
-              "expression": "provider_id",
+              "expression": "issuer",
               "isExpression": false,
               "asc": true,
               "nulls": "last"

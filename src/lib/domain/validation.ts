@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { CATEGORY_IDS } from './categories';
+import { AVATAR_PATHS } from './avatars';
 
 /* ============================================================
    OWASP A03 — Injection / A04 — Insecure Design
@@ -126,6 +127,19 @@ export const profileUpdateSchema = z.object({
 	username: usernameSchema,
 	birthDate: birthDateSchema,
 	bio: z.string().trim().max(280, 'Massimo 280 caratteri').optional().default('')
+});
+
+/**
+ * Scelta avatar: endpoint a se' (vedi api/profilo/avatar), non parte del
+ * form principale. Whitelist esplicita — mai un URL a piacere dal client
+ * (SSRF/hotlinking di immagini esterne) — solo un path noto in
+ * `static/img/avatar/`, o `null` per tornare alle iniziali generate
+ * (`Avatar.svelte`). Tenerlo separato da `profileUpdateSchema` evita che
+ * chi ha una foto Google/Apple (un URL esterno, fuori whitelist) si veda
+ * bloccare ogni salvataggio del form principale.
+ */
+export const avatarUpdateSchema = z.object({
+	image: z.enum(AVATAR_PATHS as [string, ...string[]]).nullable()
 });
 
 /* --- Paginazione: limiti duri, il client non decide quanto lavoro fa il DB --- */

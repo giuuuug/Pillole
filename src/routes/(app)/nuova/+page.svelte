@@ -16,4 +16,8 @@
 	</p>
 </header>
 
-<PillEditor canPublish={data.canPublish} />
+<PillEditor
+	canPublish={data.canPublish}
+	hasUsername={data.hasUsername}
+	emailVerified={data.emailVerified}
+/>
