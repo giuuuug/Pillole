@@ -55,7 +55,11 @@ export function loadAndVerifyTestEnv(): TestEnv {
 	}
 
 	const testHost = hostOf(databaseUrl);
-	if (testHost && /\.db\.netlify\.com$/.test(testHost) === false && /neon\.tech$/.test(testHost) === false) {
+	if (
+		testHost &&
+		/\.db\.netlify\.com$/.test(testHost) === false &&
+		/neon\.tech$/.test(testHost) === false
+	) {
 		// Non un errore fatale — solo host "non riconosciuti" (es. postgres locale per debug manuale):
 		// li lasciamo passare ma è un segnale da controllare a vista se non è quello che ti aspetti.
 		console.warn(
