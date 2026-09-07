@@ -4,6 +4,11 @@
 	let { data } = $props();
 </script>
 
+<svelte:head>
+	<title>Seguiti da @{data.username} — Pillole</title>
+	<meta name="robots" content="noindex" />
+</svelte:head>
+
 <ConnectionList
 	users={data.users}
 	username={data.username}

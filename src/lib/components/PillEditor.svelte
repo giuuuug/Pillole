@@ -12,9 +12,18 @@
 		pillId?: string;
 		initial?: Partial<PillInput>;
 		canPublish: boolean;
+		/** Perché `canPublish` è false, per mostrare il messaggio giusto. */
+		hasUsername?: boolean;
+		emailVerified?: boolean;
 	};
 
-	let { pillId, initial = {}, canPublish }: Props = $props();
+	let {
+		pillId,
+		initial = {},
+		canPublish,
+		hasUsername = true,
+		emailVerified = true
+	}: Props = $props();
 
 	// svelte-ignore state_referenced_locally
 	let title = $state(initial.title ?? '');
@@ -402,9 +411,12 @@
 					{isPublic ? 'Pubblica nel feed' : 'Resta privata'}
 				</span>
 				<span class="mt-1 block text-sm" style="color:var(--c-fg-muted)">
-					{#if !canPublish}
+					{#if !hasUsername}
 						Per pubblicare serve uno username.
 						<a href="/profilo/modifica" class="font-bold underline">Sistemalo qui</a>.
+					{:else if !emailVerified}
+						Per pubblicare devi prima confermare la tua email.
+						<a href="/profilo/sicurezza" class="font-bold underline">Vai alle impostazioni</a>.
 					{:else if isPublic}
 						Tutti potranno leggerla e salvarla nella loro libreria, con il tuo nome.
 					{:else}

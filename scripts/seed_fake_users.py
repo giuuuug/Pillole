@@ -10,11 +10,14 @@ Non rigenera i dati: li inserisce cosi' come sono stati approvati.
 Uso:
     python scripts/seed_fake_users.py
 
-Richiede DATABASE_URL (o NETLIFY_DATABASE_URL) in .env nella root del
-progetto — la stessa variabile usata da scripts/seed.ts e dalle migrazioni
-Drizzle. Si connette via psycopg2 (Postgres via TCP), come drizzle-kit:
-Neon e' Postgres pienamente compatibile anche per un client Python (vedi
-CLAUDE.md "Perche' due driver diversi per lo stesso database").
+Richiede DATABASE_URL: o esportata come variabile d'ambiente di shell (ha
+sempre la precedenza, e non tocca mai un file — e' il modo giusto per
+puntare a un database diverso da quello di sviluppo, es. la produzione,
+senza scriverne la stringa da nessuna parte), o come fallback in .env nella
+root del progetto (usata per lo sviluppo). Si connette via psycopg2
+(Postgres via TCP), come drizzle-kit: Neon e' Postgres pienamente
+compatibile anche per un client Python (vedi CLAUDE.md "Perche' due driver
+diversi per lo stesso database").
 
 Questi utenti NON hanno una riga in "account": non possono fare login,
 servono solo ad autorare pillole pubbliche. emailVerified=true + username
@@ -23,6 +26,7 @@ consideri pubblicabili.
 """
 
 import json
+import os
 import sys
 import uuid
 from pathlib import Path
@@ -42,10 +46,16 @@ DATA_FILE = Path(__file__).resolve().parent / "seed_fake_users.json"
 
 
 def get_database_url() -> str:
+    # Precedenza alla variabile di shell: e' l'unico modo per puntare a un
+    # database diverso da quello di sviluppo (es. produzione) senza doverne
+    # scrivere la stringa in un file. Fallback su .env per lo sviluppo.
+    url = os.environ.get("DATABASE_URL") or os.environ.get("NETLIFY_DATABASE_URL")
+    if url:
+        return url
     env = dotenv_values(ROOT / ".env")
     url = env.get("DATABASE_URL") or env.get("NETLIFY_DATABASE_URL")
     if not url:
-        sys.exit("DATABASE_URL non trovata in .env")
+        sys.exit("DATABASE_URL non trovata (ne' come variabile di shell ne' in .env)")
     return url
 
 

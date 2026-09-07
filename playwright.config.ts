@@ -3,8 +3,9 @@ import { defineConfig, devices } from '@playwright/test';
 /**
  * Suite blackbox (funzionale + sicurezza + accessibilità) per Pillole.
  *
- * Gira SEMPRE contro un database di test dedicato — vedi tests/support/env.ts,
- * che rifiuta di partire se DATABASE_URL punta allo stesso host di .env.
+ * Gira SEMPRE contro il database di sviluppo configurato in .env (mai
+ * produzione) — vedi tests/support/env.ts, che rifiuta di partire senza
+ * DATABASE_URL/BETTER_AUTH_SECRET impostate lì.
  * Un solo worker: i test creano/verificano email leggendo il log del server
  * (vedi tests/support/mail.ts) e condividono i bucket del rate limiter in
  * memoria dell'app — l'esecuzione seriale evita interferenze tra test.

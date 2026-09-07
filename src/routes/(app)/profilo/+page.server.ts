@@ -1,6 +1,7 @@
 import { redirect } from '@sveltejs/kit';
-import { sql } from 'drizzle-orm';
+import { eq, sql } from 'drizzle-orm';
 import { db } from '$lib/server/db';
+import { user as userTable } from '$lib/server/db/schema';
 import type { AppUser } from '$lib/server/guards';
 import type { PageServerLoad } from './$types';
 
@@ -33,6 +34,14 @@ export const load: PageServerLoad = async ({ locals, url, setHeaders }) => {
 	const rows = (Array.isArray(result) ? result : result.rows) as Stats[];
 	const stats = rows[0] ?? { total: 0, published: 0, saved: 0, followers: 0, following: 0 };
 
+	// Non è un additionalField di Better Auth (vedi schema.ts): va letto a
+	// parte, non arriva con la sessione.
+	const [row] = await db
+		.select({ badge: userTable.badge })
+		.from(userTable)
+		.where(eq(userTable.id, me.id))
+		.limit(1);
+
 	setHeaders({ 'cache-control': 'private, no-store' });
 
 	return {
@@ -41,7 +50,8 @@ export const load: PageServerLoad = async ({ locals, url, setHeaders }) => {
 			lastName: me.lastName ?? '',
 			username: me.username ?? null,
 			birthDate: me.birthDate ?? null,
-			bio: me.bio ?? null
+			bio: me.bio ?? null,
+			badge: row?.badge ?? null
 		},
 		stats
 	};

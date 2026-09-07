@@ -51,6 +51,13 @@
 
 <svelte:head>
 	<title>Cerca — Pillole</title>
+	<meta name="description" content="Cerca pillole di conoscenza e persone su Pillole." />
+	{#if data.q}
+		<!-- Ogni ricerca è un URL diverso (?q=...): indicizzarle tutte inquinerebbe
+		     i risultati con pagine quasi duplicate. Resta indicizzabile solo la
+		     pagina di ricerca vuota, non i suoi risultati. -->
+		<meta name="robots" content="noindex" />
+	{/if}
 </svelte:head>
 
 <h1 class="mb-4 text-2xl sm:text-3xl">Cerca</h1>

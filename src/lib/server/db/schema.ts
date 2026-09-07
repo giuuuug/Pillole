@@ -33,6 +33,14 @@ export const user = pgTable(
 		lastName: varchar('last_name', { length: 60 }),
 		birthDate: date('birth_date'),
 		bio: varchar('bio', { length: 280 }),
+		/**
+		 * Badge accanto al nome (es. 'gold' per il superuser/admin). Non e' un
+		 * additionalField di Better Auth: e' gestito SOLO da chi ha accesso
+		 * diretto al database (nessun endpoint lo scrive), cosi' un utente non
+		 * puo' assegnarselo da solo tramite l'update del profilo. Valori validi
+		 * in `src/lib/domain/badges.ts`.
+		 */
+		badge: varchar('badge', { length: 20 }),
 
 		createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
 		updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow()

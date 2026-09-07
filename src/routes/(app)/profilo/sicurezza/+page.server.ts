@@ -23,6 +23,7 @@ export const load: PageServerLoad = async ({ locals, url, setHeaders }) => {
 
 	return {
 		email: me.email,
+		emailVerified: Boolean(me.emailVerified),
 		hasPassword: providers.some((p) => p.providerId === 'credential'),
 		linkedProviders: providers.map((p) => p.providerId).filter((p) => p !== 'credential')
 	};

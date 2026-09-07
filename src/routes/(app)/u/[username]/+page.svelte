@@ -1,9 +1,11 @@
 <script lang="ts">
 	import { invalidateAll } from '$app/navigation';
+	import { page } from '$app/state';
 	import { toast } from '$lib/client/toast.svelte';
 	import { compactNumber, monthYear } from '$lib/utils/format';
 	import type { PillCard as PillCardData } from '$lib/server/services/pill-service';
 	import Avatar from '$lib/components/Avatar.svelte';
+	import Badge from '$lib/components/Badge.svelte';
 	import EmptyState from '$lib/components/EmptyState.svelte';
 	import Icon from '$lib/components/Icon.svelte';
 	import PillCard from '$lib/components/PillCard.svelte';
@@ -56,14 +58,35 @@
 		name="description"
 		content="Le pillole di conoscenza pubblicate da @{profile.username} su Pillole."
 	/>
+	<link rel="canonical" href={page.url.origin + page.url.pathname} />
+	<meta property="og:url" content={page.url.origin + page.url.pathname} />
+	<meta property="og:title" content="@{profile.username} su Pillole" />
+	<meta
+		property="og:description"
+		content="Le pillole di conoscenza pubblicate da @{profile.username} su Pillole."
+	/>
+	<meta property="og:type" content="profile" />
 </svelte:head>
+
+{#if profile.isSelf}
+	<a href="/profilo" class="btn btn-ghost mb-4 text-sm">
+		<Icon name="chevron-left" size={18} />
+		Torna al tuo profilo
+	</a>
+{/if}
 
 <section class="card p-5">
 	<div class="flex items-start gap-4">
 		<Avatar name={profile.name} username={profile.username} image={profile.image} size={72} />
 
 		<div class="min-w-0 flex-1">
-			<h1 class="truncate text-xl" style="font-family:var(--font-display)">@{profile.username}</h1>
+			<h1
+				class="flex items-center gap-1.5 truncate text-xl"
+				style="font-family:var(--font-display)"
+			>
+				@{profile.username}
+				<Badge id={profile.badge} size={18} />
+			</h1>
 			<p class="truncate text-sm" style="color:var(--c-fg-muted)">{profile.name}</p>
 			<p class="mt-0.5 text-xs" style="color:var(--c-fg-muted)">
 				Su Pillole da {monthYear(profile.memberSince)}

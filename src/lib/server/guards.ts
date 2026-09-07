@@ -29,14 +29,17 @@ export function requireUsername(event: RequestEvent): AppUser & { username: stri
 }
 
 /**
- * Pubblicare richiede solo uno username: il requisito "email verificata" è
- * sospeso (nessuna email parte senza RESEND_API_KEY, vedi CLAUDE.md
- * trappola #8) — tenerlo bloccherebbe la pubblicazione per chiunque, per
- * sempre, senza un percorso d'uscita. Da reintrodurre quando Resend sarà
- * configurato.
+ * Pubblicare richiede uno username E l'email verificata.
+ *
+ * Il requisito email era stato sospeso dal 2026-09-07 al 2026-09-08 perché
+ * senza RESEND_API_KEY nessuna email di verifica poteva partire (vedi
+ * CLAUDE.md trappola #8): tenerlo avrebbe bloccato la pubblicazione per
+ * chiunque, per sempre. Reintrodotto ora che Resend è configurato — vedi UI
+ * collegata in `(app)/+layout.svelte` (banner) e `/profilo/sicurezza`
+ * (badge + "Rimanda").
  */
 export function canPublish(user: AppUser): boolean {
-	return Boolean(user.username);
+	return Boolean(user.username) && Boolean(user.emailVerified);
 }
 
 const MAX_BODY_BYTES = 256 * 1024;

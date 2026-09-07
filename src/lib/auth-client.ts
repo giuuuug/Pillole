@@ -7,7 +7,15 @@ export const authClient = createAuthClient({
 	plugins: [usernameClient(), inferAdditionalFields<typeof auth>()]
 });
 
-export const { signIn, signUp, signOut, useSession, changePassword, resetPassword } = authClient;
+export const {
+	signIn,
+	signUp,
+	signOut,
+	useSession,
+	changePassword,
+	resetPassword,
+	sendVerificationEmail
+} = authClient;
 
 /** Better Auth espone la richiesta di reset come `requestPasswordReset`. */
 export const requestPasswordReset = authClient.requestPasswordReset;

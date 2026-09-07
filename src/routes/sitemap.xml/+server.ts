@@ -10,11 +10,10 @@ import type { RequestHandler } from './$types';
  * §1 "Vincoli") per non rigenerarla a ogni singolo crawl.
  */
 export const GET: RequestHandler = async () => {
-	const baseUrl = (
-		env.BETTER_AUTH_URL ||
-		env.PUBLIC_APP_URL ||
-		'https://pillole.netlify.app'
-	).replace(/\/$/, '');
+	const baseUrl = (env.BETTER_AUTH_URL || env.PUBLIC_APP_URL || 'https://pillole.me').replace(
+		/\/$/,
+		''
+	);
 
 	const [publicPills, publicUsers] = await Promise.all([
 		db
