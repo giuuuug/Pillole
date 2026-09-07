@@ -6,7 +6,7 @@ import { getUserByEmail } from '../support/db';
 import { fetchPill } from '../support/sveltekit-data';
 
 test.describe('Verifica email', () => {
-	test('un utente non verificato può comunque pubblicare (2026-09-07: il requisito email verificata è stato tolto da canPublish, vedi CLAUDE.md)', async () => {
+	test('un utente non verificato NON può pubblicare: la pillola resta privata (2026-09-08: canPublish richiede di nuovo email verificata, vedi CLAUDE.md)', async () => {
 		const { user, api } = await registerUser();
 		const res = await api.createPill(uniquePill({ isPublic: true }));
 		expect(res.status).toBe(201);
@@ -14,11 +14,11 @@ test.describe('Verifica email', () => {
 		const body = await api.json<{ id: string; published: boolean; needsVerification: boolean }>(
 			res
 		);
-		expect(body.published).toBe(true);
-		expect(body.needsVerification).toBe(false);
+		expect(body.published).toBe(false);
+		expect(body.needsVerification).toBe(true);
 
 		const { pill } = await fetchPill(api, body.id);
-		expect(pill!.isPublic).toBe(true);
+		expect(pill!.isPublic).toBe(false);
 
 		void user;
 	});

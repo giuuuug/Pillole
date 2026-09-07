@@ -10,7 +10,9 @@ thing you'd explain to a friend at a bar in two minutes.
 ![SvelteKit](https://img.shields.io/badge/SvelteKit-2-ff3e00?logo=svelte&logoColor=white)
 ![Cost](https://img.shields.io/badge/running%20cost-%E2%82%AC0%2Fmonth-informational)
 
-[**Live app**](https://pillole.netlify.app) · [Report a bug](https://github.com/giuuuug/Pillole/issues/new) · [Suggest an idea](https://github.com/giuuuug/Pillole/issues/new)
+[**Live app**](https://pillole.me) · [Report a bug](https://github.com/giuuuug/Pillole/issues/new) · [Suggest an idea](https://github.com/giuuuug/Pillole/issues/new)
+
+[![Netlify Status](https://api.netlify.com/api/v1/badges/e974f1ce-7590-4278-b24f-8dc4b42f8b76/deploy-status)](https://app.netlify.com/projects/pillole/deploys)
 </div>
 
 ---

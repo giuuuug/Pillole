@@ -4,6 +4,7 @@
 	import { relativeTime } from '$lib/utils/format';
 	import type { PillCard as PillCardData } from '$lib/server/services/pill-service';
 	import Avatar from './Avatar.svelte';
+	import Badge from './Badge.svelte';
 	import CategoryChip from './CategoryChip.svelte';
 	import Icon from './Icon.svelte';
 
@@ -103,8 +104,9 @@
 						image={pill.author.image}
 						size={28}
 					/>
-					<span class="min-w-0">
+					<span class="flex min-w-0 items-center gap-1">
 						<span class="block truncate text-sm font-bold">@{pill.author.username}</span>
+						<Badge id={pill.author.badge} size={14} />
 					</span>
 				</a>
 			{:else}

@@ -8,5 +8,10 @@ export const load: PageServerLoad = async ({ locals, url }) => {
 		redirect(303, `/accedi?next=${encodeURIComponent(url.pathname)}`);
 	}
 
-	return { canPublish: canPublish(locals.user as AppUser) };
+	const user = locals.user as AppUser;
+	return {
+		canPublish: canPublish(user),
+		hasUsername: Boolean(user.username),
+		emailVerified: Boolean(user.emailVerified)
+	};
 };

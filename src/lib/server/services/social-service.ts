@@ -22,6 +22,7 @@ export type PublicProfile = {
 	username: string | null;
 	name: string;
 	image: string | null;
+	badge: string | null;
 	bio: string | null;
 	memberSince: string;
 	pillCount: number;
@@ -36,6 +37,7 @@ export type UserCard = {
 	username: string | null;
 	name: string;
 	image: string | null;
+	badge: string | null;
 	bio: string | null;
 	pillCount: number;
 	isFollowedByViewer: boolean;
@@ -56,6 +58,7 @@ export async function getProfileByUsername(
 			username: user.username,
 			name: user.name,
 			image: user.image,
+			badge: user.badge,
 			bio: user.bio,
 			memberSince: user.createdAt,
 			pillCount: sql<number>`(
@@ -109,6 +112,7 @@ export async function searchUsers(opts: {
 			username: user.username,
 			name: user.name,
 			image: user.image,
+			badge: user.badge,
 			bio: user.bio,
 			pillCount: sql<number>`(
 				select count(*)::int from ${pill}
@@ -192,6 +196,7 @@ export async function getConnections(opts: {
 			username: user.username,
 			name: user.name,
 			image: user.image,
+			badge: user.badge,
 			bio: user.bio,
 			pillCount: sql<number>`(
 				select count(*)::int from ${pill}
@@ -220,6 +225,7 @@ export async function getSuggestedUsers(viewerId: string, limit = 5): Promise<Us
 			username: user.username,
 			name: user.name,
 			image: user.image,
+			badge: user.badge,
 			bio: user.bio,
 			pillCount: sql<number>`count(${pill.id})::int`,
 			isFollowedByViewer: sql<boolean>`false`

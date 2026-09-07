@@ -5,10 +5,20 @@ import { loadAndVerifyTestEnv } from './env';
 
 /**
  * Avvia il server di sviluppo (vite dev) come processo figlio, puntato al
- * database di TEST (mai a quello reale — vedi env.ts), e ne registra
+ * database di sviluppo configurato in .env (mai a produzione — vedi env.ts),
+ * e ne registra
  * stdout/stderr su file: e' il nostro "mailbox" per leggere i link di
  * verifica email / reset password che l'app logga quando RESEND_API_KEY
  * non e' configurata (vedi src/lib/server/email.ts).
+ *
+ * `RESEND_API_KEY` viene tolta a prescindere da cosa c'e' in `.env`: da
+ * quando `.env` serve anche a `npm run dev` (non solo ai test, vedi trappola
+ * #17 in CLAUDE.md), puo' contenere una chiave vera per testare l'invio
+ * reale in locale. I test usano indirizzi `@example.invalid` (RFC 2606),
+ * mai recapitabili: se la chiave e' presente l'app prova a spedire
+ * davvero e non logga piu' il link, e `tests/support/mail.ts` resta ad
+ * aspettare per sempre. I test non devono MAI dipendere da cosa un
+ * developer ha impostato per il proprio uso interattivo.
  */
 export default async function globalSetup() {
 	const env = loadAndVerifyTestEnv();
@@ -35,7 +45,7 @@ export default async function globalSetup() {
 		],
 		{
 			cwd: root,
-			env: { ...process.env },
+			env: { ...process.env, RESEND_API_KEY: '' },
 			stdio: ['ignore', 'pipe', 'pipe']
 		}
 	);

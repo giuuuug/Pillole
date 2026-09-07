@@ -20,3 +20,6 @@ scripts/__pycache__/
 scripts/*.pyc
 
 CLAUDE.md
+
+# Materiale di marketing/contenuti, non parte dell'app — resta locale
+/ads
